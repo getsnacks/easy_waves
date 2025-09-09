@@ -1,38 +1,75 @@
-PImage img;
+//color1 = #1C42C5
+//color2 = #FBE3BC
 
-void setup() {
-  size(600, 600);
+//PFont font;
+//String phrase = "EASY COME, EASY GO";
 
-  img = loadImage("carpet.jpeg");
-  img.resize(width, 0);
-  //img.filter(GRAY);
+boolean toggle = false;
+
+void setup(){
+ //size(1465,890); 
+ //size(500,500);
+ //size(540,675);
+ size(1350,1080);
+ //font = createFont("Helvetica-Bold", 48);
+ //textFont(font);
+ //textSize(30);
+ //textAlign(CENTER, CENTER);
 }
-
-void draw() {
-  background(0);
-
-  int tilesX = 32;
-  int tilesY = 18;
-
-  int tileW = int(width/tilesX);
-  int tileH = int(height/tilesY);
-
-  for (int x = 0; x < tilesX; x++) {
-    for (int y = 0; y < tilesY; y++) {
-
-      int waveX = int(map(tan(radians(frameCount + x * 2 + y * 2)), -1, 1, -100, 100));
-
-      int sx = x * tileW;
-      int sy = y * tileH;
-      int sw = tileW;
-      int sh = tileH;
-
-      int dx = sx + waveX;
-      int dy = sy;
-      int dw = tileW;
-      int dh = tileH;
-
-      copy(img, sx, sy, sw, sh, dx, dy, dw, dh);
-    }
+  
+void draw(){
+  // toggle kontrolü
+  if (frameCount % 30 == 0) {  
+    toggle = !toggle;
   }
+  
+  // toggle'a göre arka plan ve dolgu rengi
+  if (toggle) {
+    background(#1C42C5);  // lacivert arka plan
+    fill(#FBE3BC);   
+  } else {
+    background(#FBE3BC);  // krem arka plan
+    fill(#1C42C5); 
+  }
+  //background(#1C42C5);
+  translate(width/2,height/2);
+  
+  // The amount of elements
+  float amount = 100;
+  //for text
+  //float amount = phrase.length(); 
+  // The size of the figure
+  float magnitude = 50;
+  
+  //fill(#FBE3BC);
+  noStroke();
+  
+  for(int i = 0; i < amount; i++){
+    
+    //char c = phrase.charAt(i);
+    
+    //wave1 alters the x-axis
+    float wave1 = tan(radians(frameCount + i * 2)) * magnitude;
+    
+    // wave2 alters the y-axis
+    float wave2 = cos(radians(frameCount + i * 500)) * magnitude;
+    
+    // dönüş açısı (burada hem frameCount hem de i kullanabilirsin)
+    float angle = radians(frameCount + i*2);
+    
+    pushMatrix();
+    //translate(wave1, wave2);
+    rotate(angle);
+    //rect(wave1, wave2, 10, 20);
+    rect(wave1, wave2, frameCount, frameCount);
+    //text(c,wave1,wave2);
+    popMatrix();
+  }
+  
+  if (frameCount == 680){
+    exit();
+  //println("Frame: " + frameCount);
+  }
+  
+   saveFrame("output/image####.png");
 }
